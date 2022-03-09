@@ -25,12 +25,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-for="product in products" :key="product.id">
                 <td style="width: 200px">
                   <div style="height: 100px; background-size: cover; background-position: center"></div>
                 </td>
                 <td>
-                  {{  }}
+                  {{ product.title }}
                 </td>
                 <td>
                   <div class="h5">{{  }} 元</div>
@@ -186,6 +186,6 @@
     <script src="https://unpkg.com/vee-validate@next"></script>
     <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>
     <script src="https://unpkg.com/@vee-validate/rules"></script>
-    <script src="./js/cart.js" type="module"></script>
+    <script src="js/cart.js" type="module"></script>
   </body>
 </html>
