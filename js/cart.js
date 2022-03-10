@@ -57,9 +57,25 @@ const app = createApp({
       this.isLoadingItem = id; // 讀取效果
       axios.delete(`${apiUrl}/api/${apiPath}/cart/${id}`)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           this.getCart(); // 刪除品項後，再重新取得購物車內容
           this.isLoadingItem = ''; // 刪除品項後，把 id 清空
+        })
+        .catch((err) => {
+          alert(err.data.message);
+        })
+    },
+    updateCartItem(item){ // 直接帶入 item
+      const data = { // 建構資料格式
+        product_id: item.id,
+        qty: item.qty,
+      };
+      this.isLoadingItem = item.id;
+      axios.put(`${apiUrl}/api/${apiPath}/cart/${item.id}`, {data})
+        .then((res) => {
+          console.log(res);
+          this.getCart(); // 加入購物車後，再重新取得購物車內容
+          this.isLoadingItem = ''; // 加入購物車後，把 id 清空
         })
         .catch((err) => {
           alert(err.data.message);
