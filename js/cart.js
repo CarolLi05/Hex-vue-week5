@@ -1,9 +1,11 @@
-import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
+// import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
+
+import productModal from './productModal.js';
 
 const apiUrl = 'https://vue3-course-api.hexschool.io/v2';
 const apiPath = 'carolli_apexc';
 
-const app = createApp({
+const app = Vue.createApp({
   data(){
     return{
       cartData: {}, // 購物車列表
@@ -11,6 +13,9 @@ const app = createApp({
       productId: '', // 取得單一產品的 id
       isLoadingItem: '', // 讀取效果
     }
+  },
+  components:{
+    productModal,
   },
   methods: {
     getProducts(){
@@ -88,47 +93,5 @@ const app = createApp({
     this.getCart();
   }
 });
-
-app.component('product-modal', {
-  props: ['id'],
-  template: '#userProductModal',
-  data(){
-    return{
-      modal: {}, // modal 資料變數
-      product: {},
-      qty: 1, //購物車項目數量至少要有 1 個
-    }
-  },
-  watch:{ // 監聽 id，如果有變動就取的該產品的資料
-    id(){
-      this.getProduct();
-    }
-  },
-  methods:{
-    openModal(){
-      this.modal.show();
-    },
-    closeModal(){
-      this.modal.hide();
-    },
-    getProduct(){
-      axios.get(`${apiUrl}/api/${apiPath}/product/${this.id}`)
-        .then((res) => {
-          // console.log(res);
-          this.product = res.data.product;
-        })
-        .catch((err) => {
-          alert(err.data.message);
-        })
-    },
-    addToCart(){
-      // console.log(this.qty);
-      this.$emit('add-cart', this.product.id, this.qty)
-    }
-  },
-  mounted() {
-    this.modal = new bootstrap.Modal(this.$refs.modal);
-  },
-})
 
 app.mount('#app');
