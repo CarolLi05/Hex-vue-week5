@@ -2,17 +2,52 @@
 
 import productModal from './productModal.js';
 
+// 宣告要使用的東西
+const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+const { required, email, min, max } = VeeValidateRules;
+const { localize, loadLocaleFromURL } = VeeValidateI18n; //多國語系
+
+// defineRule() 是 vee-validate 提供的函式，用來定義規則
+// 第一個參數是規則命名，第二個是 VeeValidateRules 提供的規則
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('max', max);
+// 限制 8-10 碼
+
+loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
+
+configure({ // 用來做一些設定
+  generateMessage: localize('zh_TW'), //啟用 locale
+  validateOnInput: true, // 調整為：輸入文字時，就立即進行驗證
+});
+
 const app = Vue.createApp({
   data(){
     return{
-      cartData: {}, // 購物車列表
+      cartData: {
+        carts: [], // 清空購物車時需要
+      }, // 購物車列表
       products: [], // 產品列表
       productId: '', // 取得單一產品的 id
       isLoadingItem: '', // 讀取效果
+      form:{
+        user: {
+          email: '',
+          name: '',
+          address: '',
+          phone: ''
+        },
+        message: '',
+      },
     }
   },
   components:{
     productModal,
+    // 表單標籤註冊成區域元件
+    VForm: Form,
+    VField: Field,
+    ErrorMessage: ErrorMessage,
   },
   methods: {
     getProducts(){
@@ -82,6 +117,32 @@ const app = Vue.createApp({
         })
         .catch((err) => {
           alert(err.data.message);
+        })
+    },
+    delAllCart(){
+      this.isLoadingItem = 1;
+      axios.delete(`${apiUrl}/api/${apiPath}/carts`)
+        .then((res)=>{
+          // console.log(res);
+          this.isLoadingItem = 0;
+          this.getCart();
+            alert(res.data.message);
+        })
+        .catch((err)=>{
+          alert(err.data.message);
+        })
+    },
+    createOrder(){
+      const order = this.form;
+      axios.post(`${apiUrl}/api/${apiPath}/order`, {data: order})
+        .then((res) => {
+          alert(res.data.message);
+          this.$refs.form.resetForm(); // 表單清空
+          this.form.message = '';
+          this.getCart();
+        })
+        .catch((err) => {
+          alert(err.data.message)
         })
     },
   },
