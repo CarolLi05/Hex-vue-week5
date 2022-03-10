@@ -94,7 +94,8 @@ app.component('product-modal', {
   data(){
     return{
       modal: {}, // modal 資料變數
-      product: {}
+      product: {},
+      qty: 1, //購物車項目數量至少要有 1 個
     }
   },
   watch:{ // 監聽 id，如果有變動就取的該產品的資料
@@ -115,6 +116,10 @@ app.component('product-modal', {
         .catch((err) => {
           alert(err.data.message);
         })
+    },
+    addToCart(){
+      // console.log(this.qty);
+      this.$emit('add-cart', this.product.id, this.qty)
     }
   },
   mounted() {

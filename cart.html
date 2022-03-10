@@ -13,7 +13,7 @@
       <div class="container">
         <div class="mt-4">
           <!-- 產品Modal -->
-          <product-modal :id="productId" ref="productModal"></product-modal>
+          <product-modal :id="productId" ref="productModal" @add-cart="addToCart"></product-modal>
           <!-- 產品Modal -->
           <table class="table align-middle">
             <thead>
@@ -165,7 +165,7 @@
             <div class="modal-body">
               <div class="row">
                 <div class="col-sm-6">
-                  <img class="img-fluid" :src="" alt="">
+                  <img class="img-fluid" :src="product.imageUrl" alt="">
                 </div>
                 <div class="col-sm-6">
                   <span class="badge bg-primary rounded-pill">{{  }}</span>
@@ -176,8 +176,8 @@
                   <div class="h5">現在只要 {{  }} 元</div>
                   <div>
                     <div class="input-group">
-                      <input type="number" class="form-control" min="1">
-                      <button type="button" class="btn btn-primary">加入購物車</button>
+                      <input type="number" class="form-control" min="1" v-model.number="qty" />
+                      <button type="button" class="btn btn-primary" @click="addToCart">加入購物車</button>
                     </div>
                   </div>
                 </div>
