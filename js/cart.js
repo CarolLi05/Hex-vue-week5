@@ -25,7 +25,7 @@ const app = createApp({
     },
     openProductModal(id){
       this.productId = id;
-      this.$refs.productModal.openModal(); // 使用 ref 操控 modal
+      this.$refs.productModal.openModal(); // 使用 ref 開啟 modal
     },
     getCart(){
       axios.get(`${apiUrl}/api/${apiPath}/cart`)
@@ -47,6 +47,7 @@ const app = createApp({
         .then((res) => {
           // console.log(res);
           this.getCart(); // 加入購物車後，再重新取得購物車內容
+          this.$refs.productModal.closeModal(); // 使用 ref 關閉 modal
           this.isLoadingItem = ''; // 加入購物車後，把 id 清空
         })
         .catch((err) => {
@@ -106,6 +107,9 @@ app.component('product-modal', {
   methods:{
     openModal(){
       this.modal.show();
+    },
+    closeModal(){
+      this.modal.hide();
     },
     getProduct(){
       axios.get(`${apiUrl}/api/${apiPath}/product/${this.id}`)
